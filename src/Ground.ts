@@ -81,7 +81,9 @@ export class Ground extends gfx.Mesh
 
 
         // TO DO: ADD YOUR CODE HERE
-
+        const plane = gfx.Vector3.subtract(groundEndPoint, groundStartPoint);
+        const normal = gfx.Vector3.normalize(plane);
+        const groundPlane = new gfx.Plane(plane, normal);
 
 
         // 2. Loop through the screenPath vertices to project the 2D stroke into 3D so
@@ -93,7 +95,21 @@ export class Ground extends gfx.Mesh
 
 
         // TO DO: ADD YOUR CODE HERE
+        const point = new gfx.Vector2(screenPath[0].x, screenPath[0].y);
+        const ray = new gfx.Ray;
 
+        for (let i = 0; i < screenPath.length; i++) {
+
+            point.set(screenPath[i].x, screenPath[i].y);
+            ray.setPickRay(point, camera);
+
+            const intersection = ray.intersectsPlane(groundPlane);
+            if(intersection) {
+                this.vertices[i].copy(intersection);
+                this.vertices[i].subtract(this.position);
+                this.vertices[i].rotate(camera.rotation);
+            }
+        }
 
 
         // 3. Loop through all of the vertices of the ground mesh, and adjust the
@@ -104,7 +120,7 @@ export class Ground extends gfx.Mesh
 
 
         // TO DO: ADD YOUR CODE HERE
-
+        
 
 
         // Finally, the new vertex positions have been computed, we need to assign

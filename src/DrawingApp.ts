@@ -262,8 +262,22 @@ export class DrawingApp extends gfx.GfxApp
 
 
             // TO DO: ADD YOUR CODE HERE
-
             
+            const skyIntersection = ray.intersectsMesh(this.skyBox);
+
+            if (skyIntersection) {
+                this.drawState = DrawState.DRAWING_SKY;
+
+                this.currentBillboard = new Billboard(
+                    deviceCoords,
+                    skyIntersection,
+                    gfx.Color.createFromString(this.crayonColor),
+                    this.strokeWidth
+                );
+                this.scene.add(this.currentBillboard);
+
+                return;
+            }
         }
     }
 

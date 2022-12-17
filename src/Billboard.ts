@@ -211,8 +211,23 @@ export class Billboard extends gfx.Transform3
        
 
         // TO DO: ADD YOUR CODE HERE
+        const point = new gfx.Vector2(this.vertices[0].x, this.vertices[0].y);
+        const ray = new gfx.Ray();
 
+        for(let i = 0; i < this.vertices.length; i++) {
 
+            point.set(this.vertices[i].x, this.vertices[i].y);
+            ray.setPickRay(point, camera);
+
+            const intersection = ray.intersectsMesh(sky);
+            if(intersection) {
+                this.vertices[i].copy(intersection);
+                this.vertices[i].subtract(this.position);
+                this.vertices[i].rotate(camera.rotation);
+            }
+        }
+
+        this.mesh.setVertices(this.vertices);
         
     }
 
